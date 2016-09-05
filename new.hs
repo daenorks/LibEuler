@@ -39,7 +39,7 @@ listPalindromeN n = if even n
 
 isPal n = n == (reversal n)
 
-length [x | x <- [1..10000], ((== 51) . length) $ take 51 $ takeWhile (not . isPal) (iterate palCycle $ palCycle x)]
+--length [x | x <- [1..10000], ((== 51) . length) $ take 51 $ takeWhile (not . isPal) (iterate palCycle $ palCycle x)]
 
 palCycle x = x + (reversal x)
 palindrome = ([x | x <- listPalindromeN 6, btw2 (midList(listDiv x)) 100 999]) !! 0
@@ -51,6 +51,17 @@ sumDivNumber = [(x, sumDiv x) | x <- [1..]]
 abundantNumber = [x | (x, y) <- sumDivNumber, x < y]
 perfectNumber = [x | (x, y) <- sumDivNumber, x == y]
 deficientNumber = [x | (x, y) <- sumDivNumber, x > y]
+
+fac n = product [1..n]
+
+--nieme combinaison
+nComb list n = nCombh list (mod (n-1) (fac (length list)))
+nCombh [] n = []
+nCombh list n = (elemen):(nCombh (delete elemen list) rest)
+    where facl = (fac ((length list) -1))
+          numelem = div n facl
+          rest = n - (numelem * facl)
+          elemen = list !! numelem
 
 --divisor stuff
 sumDiv = sum . init . listDiv
@@ -95,6 +106,12 @@ maxfprimeh f list n = if elem (f n) list
         else n
 
 uniqPrime number = map head $ group $ primeF number
+
+--cycle
+
+ncycle n = ncycleh [1] n
+ncycleh list n = if elem rest list then list else ncycleh (rest:list) n
+    where rest = mod ((head list) * 10) n
 
 --fibonnacci
 
