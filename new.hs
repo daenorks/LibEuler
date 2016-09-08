@@ -1,8 +1,27 @@
 import Data.List as L
 import Data.Char
 
+--binary stuff
+
+decToBin x = reverse $ decToBin' x
+  where
+    decToBin' 0 = []
+    decToBin' y = let (a,b) = quotRem y 2 in [b] ++ decToBin' a
+
 --trick on number
-reversal :: Integral a => a -> a
+
+elemList x y = foldr1 (&&) $ map (`elem` y) x
+
+multTailsInt x = tail $ (tailsInt x) ++  (reverseTailsInt x)
+
+sizeInt x = length (digs x)
+
+reverseTailsInt 0 = []
+reverseTailsInt x = x:(reverseTailsInt (div x 10))
+
+tailsInth 0 _ = []
+tailsInth x y = x:(tailsInth (mod x y) (div y 10))
+tailsInt x = tailsInth x (10^((sizeInt x)-1))
 reversal = go 0
   where go a 0 = a
         go a b = let (q,r) = b `quotRem` 10 in go (a*10 + r) q
@@ -107,6 +126,9 @@ maxfprimeh f list n = if elem (f n) list
 
 uniqPrime number = map head $ group $ primeF number
 
+lrprimes = 2:3:5:7:(filter (\x -> elemList (tai x) lrprimes) primes)
+    where tai x = [mod x (10^((sizeInt x) -1)),div x 10]
+
 --cycle
 ncycle :: Integer -> [Integer]
 ncycle n = ncycleh [1] n
@@ -118,6 +140,17 @@ cycleMax n = find (\x -> (fromIntegral $ length(ncycle x)) == (x-1)) $ reverse $
 --fibonnacci
 
 fibonacci = 0:1:(zipWith (+) fibonacci (tail fibonacci))
+
+--circular number
+
+circulars x = sort $ circularB x
+circularB x = circular newx lengthn x
+    where lengthn = ((length $ digs x) - 1)
+          newx = ((div x (10^lengthn)) + ((mod x (10^lengthn))*10))
+circular x lengthn number = if number == x
+        then [x] 
+        else x:(circular newx lengthn number)
+    where newx = ((div x (10^lengthn)) + ((mod x (10^lengthn))*10))
 
 --amicable number
 
